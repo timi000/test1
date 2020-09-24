@@ -20,7 +20,7 @@ d3.json("/api/v1.0/covid_trends"). then(function(data){
     scatterDict["y"]=d[optionvalue]
     scatterData.push(scatterDict)
   })*/
-
+var nline;
   var trendList= ["Bike", "CERB", "Zoom", "Patio","Mask"];
     console.log(trendList)
  // Appending list into a dropdown
@@ -44,9 +44,9 @@ d3.json("/api/v1.0/covid_trends"). then(function(data){
   var opt1 = "Mask"
   var opt2="daily_tests"
    
- 
+  
   var canvas = document.getElementById('myChart');
-  var nline =new Chart(canvas, {
+ var lineData={
     type: 'line',
     data: {
       labels: data.map(d=>d.date),
@@ -74,9 +74,11 @@ d3.json("/api/v1.0/covid_trends"). then(function(data){
         }]
       }
     }
-  });
+  };
 
-
+  if(window.bar != undefined) 
+  window.bar.destroy(); 
+  window.bar = new Chart(canvas, lineData);
 
 
 
@@ -84,7 +86,7 @@ d3.json("/api/v1.0/covid_trends"). then(function(data){
 
 function updateTrends() {
   
-  myChart.destroy()
+
   
   var y1Menu =d3.select("#selTrend");
   var optiony1 = y1Menu.property("value");
@@ -98,9 +100,13 @@ function updateTrends() {
    
    
     
-    var canvas = document.getElementById('myChart');
+    var canvas = document.getElementById('myChart').getContext("2d");
+    
+
+
   
-    var nline =new Chart(canvas, {
+   // var nline =new Chart(canvas, 
+     var lineData= {
       type: 'line',
       data: {
         labels: data.map(d=>d.date),
@@ -128,11 +134,14 @@ function updateTrends() {
           }]
         }
       }
-    });
-
+    };
+    if(window.bar != undefined) 
+    window.bar.destroy(); 
+    window.bar = new Chart(canvas, lineData);
   
   }
  
+
 
   
   document.getElementById("selTrend").addEventListener("change", updateTrends)

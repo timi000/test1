@@ -2,13 +2,41 @@
 // Incoming data is internally referred to as incomingData
 
 
+
+
 d3.json("/api/v1.0/canada_covid"). then(function(data){
   console.log(data)
+  var filteredData = data.filter(function (d) {
+    return d.province_name != "Canada" && d.province_name !=  "Repatriated travellers" && d.date=="18-09-2020";
+  });
+ 
+    var location =[];
+
+    
+    filteredData.forEach(fdata=>{
+      fdata["Coordinate"]=[fdata.latitude, fdata.longitude]
+    
+    // })
+    
+  
+  })
+  console.log(filteredData)
 })
 
 
 d3.json("/api/v1.0/covid_trends"). then(function(data){
   console.log(data)
+  var parseTime = d3.timeParse("%d-%b");
+data.forEach(d=>{
+  
+
+  // Format the data
+ 
+
+    console.log(d.date)
+
+})
+  
 
   /*dateArray=data.map(d=>d.date)
 
@@ -53,26 +81,50 @@ var nline;
       datasets: [{
         label: opt1,
         yAxisID: "A",
-        data: data.map(d=>d[opt1])
+        data: data.map(d=>d[opt1]),
+       borderColor: "Cyan"
       }, {
         label: opt2,
         yAxisID: "B",
-        data: data.map(d=>d[opt2])
+        data: data.map(d=>d[opt2]),
+        borderColor: "Crimson"
       }]
-    },
+    },fill: false,
     options: {
       scales: {
         yAxes: [{
           id: "A",
           type: 'linear',
           position: 'left',
+          scaleLabel:{
+            display: true,
+        labelString: opt1
+          },
+        
         }, {
           id: "B",
           type: 'linear',
           position: 'right',
+          scaleLabel:{
+            display: true,
+        labelString: opt2
+          },
           
-        }]
-      }
+          
+        }],
+        xAxes:[
+          {scaleLabel:{
+            display: true,
+        labelString: "Date"
+          }
+          }
+        ]
+      }, 
+      elements: {
+        line: {
+                fill: false
+        }
+    }
     }
   };
 
@@ -113,27 +165,53 @@ function updateTrends() {
         datasets: [{
           label: opt1,
           yAxisID: opt1,
-          data: data.map(d=>d[opt1])
+          data: data.map(d=>d[opt1]),
+          borderColor: "Cyan"
         }, {
           label: opt2,
           yAxisID: opt2,
-          data: data.map(d=>d[opt2])
+          data: data.map(d=>d[opt2]),
+          borderColor: "Crimson"
         }]
       },
+      
       options: {
         scales: {
           yAxes: [{
             id: opt1,
             type: 'linear',
             position: 'left',
+            scaleLabel:{
+              display: true,
+          labelString: opt1
+            }
           }, {
             id: opt2,
             type: 'linear',
             position: 'right',
+            scaleLabel:{
+              display: true,
+          labelString: opt2
+            }
             
-          }]
-        }
+          }],
+          
+          xAxes:[
+            {scaleLabel:{
+              display: true,
+          labelString: "Date"
+            }
+            }
+          ]
+        }, 
+        elements: {
+          line: {
+                  fill: false
+          }
       }
+   
+        }
+      
     };
     if(window.bar != undefined) 
     window.bar.destroy(); 

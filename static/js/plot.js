@@ -203,7 +203,7 @@ function updateTrends() {
             }
             }
           ]
-        }, 
+        },
         elements: {
           line: {
                   fill: false
